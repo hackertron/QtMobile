@@ -2,7 +2,7 @@
 TEMPLATE = app
 TARGET = mantra
 
-QT += qml quick core
+QT += qml quick core sql
 CONFIG += c++11
 
 HEADERS += \

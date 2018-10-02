@@ -57,10 +57,10 @@ Flickable {
                 leftPadding: 10
                 text: qsTr("Today's Mantra")
             }
-            IconInactive {
-                imageName: modelData.icon
-                imageSize: 48
-            }
+            //            IconInactive {
+            //                imageName: modelData.icon
+            //                imageSize: 48
+            //            }
             HorizontalDivider {
 
 
@@ -68,12 +68,14 @@ Flickable {
             RowLayout {
 
                 Image {
-                    id: name
+                    id: mantra_image
+                    antialiasing: false
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     clip: false
-                    fillMode: Image.Tile
+                    fillMode: Image.PreserveAspectFit
                     Layout.fillHeight: true
                     Layout.fillWidth: true
-                    source: "http://192.168.0.105:3000/images/mantra1.JPG"
+                    source: "http://vkguptamantra.herokuapp.com/images/Mantra1.png"
                 }
             }
             HorizontalDivider {}
@@ -85,35 +87,36 @@ Flickable {
                     wrapMode: Text.WordWrap
                     text: qsTr("Have you recited your mantra today ?")
                 }
+                Button {
+                    id: yes
+                    width: 100
+
+                    text: "YES"
+                    antialiasing: false
+                    //Layout.preferredWidth: 169
+                    Layout.fillHeight: false
+                    Layout.fillWidth: true
+                    font.bold: true
+
+                }
+                Button {
+                    id: no
+                    width: 100
+                    text: "NO"
+                    //Layout.preferredWidth: 169
+                    Layout.fillWidth: true
+                    font.bold: true
+                }
             }
             HorizontalDivider {
                 RowLayout {
 
-                    Button {
-                        id: yes
-                        width: 100
 
-                        text: "YES"
-                        antialiasing: false
-                        //Layout.preferredWidth: 169
-                        Layout.fillHeight: false
-                        Layout.fillWidth: true
-                        font.bold: true
-
-                    }
-                    Button {
-                        id: no
-                        width: 100
-                        text: "NO"
-                        //Layout.preferredWidth: 169
-                        Layout.fillWidth: true
-                        font.bold: true
-                    }
                 }
 
 
             }
-            RowLayout {}
+//            RowLayout {}
 
         } // col layout
     } // root

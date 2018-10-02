@@ -12,6 +12,10 @@
 #include <QFile>
 #include <QDir>
 
+#include <QtSql>
+#include <QSqlDatabase>
+#include <QSqlDriver>
+
 
 int main(int argc, char *argv[])
 {
@@ -37,16 +41,70 @@ int main(int argc, char *argv[])
     context->setContextProperty("myApp", &appui);
 
     //standard path to store all the application data ( varies from OS to OS )
-        QString path = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
-        qDebug() << path;
+    QString path = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
+    qDebug() << path;
 
-        QDir dir(path);
-           if (!dir.exists())
-               dir.mkpath(path);
-           if (!dir.exists("MANTRA_appdata"))
-               dir.mkdir("MANTRA_appdata");
+    context->setContextProperty("path", path);
 
-           dir.cd("MANTRA_appdata");
+
+    QDir dir(path);
+    if (!dir.exists())
+        dir.mkpath(path);
+    if (!dir.exists("MANTRA_appdata"))
+        dir.mkdir("MANTRA_appdata");
+
+    dir.cd("MANTRA_appdata");
+
+
+            /*
+             * creates sqlite DB to keep track of all the info offline
+             * and also it's dependencies
+             *
+            */
+    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");//not dbConnection
+    db.setDatabaseName(dir.absoluteFilePath("MANTRA.db"));
+    if(!db.open())
+    {
+        qDebug() <<"error";
+    }
+    else
+    {
+        qDebug() <<"connected" ;
+    }
+
+    QSqlQuery query;
+
+    if( query.exec("CREATE TABLE IF NOT EXISTS `User`"
+                   "(  `ID` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT ,"
+                   "`server_id` VARCHAR(32)  NOT NULL ,"
+                   "`email` VARCHAR(100) NOT NULL);"))
+    {
+        qDebug() << "User table created";
+    }
+    else
+    {
+        qDebug() <<query.lastError();
+    }
+
+    if(query.exec("CREATE TABLE IF NOT EXISTS `Mantra` ("
+                  "`mantra_ID` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
+                  " `email` VARCHAR(100) NOT NULL,"
+                  "`mantra_type` VARCHAR(30) NOT NULL,"
+                  "`enabled` BOOLEAN NOT NULL,"
+                  "`time` VARHCAR(10) NOT NULL);"))
+    {
+        qDebug() << "Mantra table created";
+
+    }
+    else
+    {
+        qDebug() <<query.lastError();
+    }
+
+    query.clear();
+    db.close();
+
+
 
 
 
