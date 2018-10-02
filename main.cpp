@@ -7,6 +7,8 @@
 
 #include "applicationui.hpp"
 
+#include "dbmanager.h"
+
 #include <QUrl>
 #include <QStandardPaths>
 #include <QFile>
@@ -39,6 +41,11 @@ int main(int argc, char *argv[])
     // from QML we have access to ApplicationUI as myApp
     QQmlContext* context = engine.rootContext();
     context->setContextProperty("myApp", &appui);
+
+
+    // dbmanager object
+    dbmanager dbman;
+    context->setContextProperty("dbman", &dbman);
 
     //standard path to store all the application data ( varies from OS to OS )
     QString path = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
@@ -104,6 +111,28 @@ int main(int argc, char *argv[])
     query.clear();
     db.close();
 
+    /* *** Images download **/
+
+
+
+           QVector<QString>images = {"Mantra1.png", "Mantra2.png", "Mantra3.png", "Mantra4.png", "Mantra5.png", "Mantra6.png",
+                                            "Mantra7.png", "Mantra8.png", "Mantra9.png"};
+
+           for(int i = 0; i < 9; i++)
+           {
+               if(QFile::exists(dir.absoluteFilePath(images[i]))) // checks if the image already exist
+               {
+                   qDebug() << " already downloaded " << images[i];
+               }
+
+               else{
+                   QString url = "http://vkguptamantra.herokuapp.com/images/" + images[i];
+
+                   QString id = (QString)i;
+                   dbman.downloadFile(url, id, path, images[i]);
+
+               }
+           }
 
 
 

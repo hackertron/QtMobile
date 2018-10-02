@@ -7,10 +7,12 @@ CONFIG += c++11
 
 HEADERS += \
     applicationui.hpp \
-    uiconstants.hpp
+    uiconstants.hpp \
+    dbmanager.h
 
 SOURCES += main.cpp \
-    applicationui.cpp
+    applicationui.cpp \
+    dbmanager.cpp
 
 lupdate_only {
     SOURCES +=  main.qml \
