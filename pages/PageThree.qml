@@ -16,6 +16,7 @@ Flickable {
     property string emailID : ""
     property  bool subscribed : false
     property string info : ""
+    property string server_id: ""
 
     function disableSubmit() {
         submit.enabled = false

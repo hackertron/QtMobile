@@ -70,6 +70,7 @@ void dbmanager::subscribe_db(QString server_id, QString email)
           }
 }
 
+
 QString dbmanager::getImage_url()
 {
     QString db_path = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);

@@ -97,6 +97,9 @@ Flickable {
                     Layout.fillHeight: false
                     Layout.fillWidth: true
                     font.bold: true
+                    onClicked: {
+
+                    }
 
                 }
                 Button {
@@ -106,6 +109,9 @@ Flickable {
                     //Layout.preferredWidth: 169
                     Layout.fillWidth: true
                     font.bold: true
+                    onClicked: {
+
+                    }
                 }
             }
             HorizontalDivider {

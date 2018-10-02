@@ -18,6 +18,9 @@
 #include <QSqlDatabase>
 #include <QSqlDriver>
 
+#include <QJsonObject>
+#include <QJsonDocument>
+
 
 int main(int argc, char *argv[])
 {
@@ -109,6 +112,93 @@ int main(int argc, char *argv[])
     }
 
     query.clear();
+
+
+
+    // insert into Mantra table
+    QString id;
+
+    QSqlQuery quer("SELECT server_id FROM User WHERE ID = 1");
+    while (quer.next()) {
+        id = quer.value(0).toString();
+    }
+
+
+
+    qDebug() << "got id : " << id;
+    if(id.isEmpty())
+    {
+        qDebug() << "no insertions in Mantra yet !!";
+    }
+    else
+    {
+        // create custom temporary event loop on stack
+           QEventLoop eventLoop;
+
+           // "quit()" the event-loop, when the network request "finished()"
+           QNetworkAccessManager mgr;
+           QObject::connect(&mgr, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(quit()));
+
+           // the HTTP request
+           const QUrl req_url = "https://vkguptamantra.herokuapp.com/api/users/" + id;
+           QNetworkRequest req(req_url);
+           QNetworkReply *reply = mgr.get(req);
+           eventLoop.exec();
+
+
+           if (reply->error() == QNetworkReply::NoError) {
+               //success
+               //qDebug() << "Success" <<reply->readAll();
+               QString   result = (QString)reply->readAll();
+               QJsonDocument jsonResponse = QJsonDocument::fromJson(result.toUtf8());
+
+               QJsonObject jsonObj = jsonResponse.object();
+
+
+               foreach (const QString& key, jsonObj.keys()) {
+
+                   qDebug() << key << " : " << jsonObj.value(key);
+
+                   QString email = jsonObj.value("email").toString();
+                   if(key == "mantra1" || key == "mantra2" || key == "mantra3" || key == "mantra4" || key == "mantra5" || key == "mantra6"
+                           || key == "mantra7" || key == "mantra8" || key == "mantra9")
+                   {
+                        bool enabled = jsonObj[key].toObject()["enabled"].toBool();
+                        QString time = jsonObj[key].toObject()["time"].toString();
+
+                        query.prepare("INSERT INTO Mantra (email, mantra_type, enabled, time) VALUES(:email, :mantra_type, :enabled, :time)");
+                        query.bindValue(":email", email);
+                        query.bindValue(":mantra_type", key);
+                        query.bindValue(":enabled", enabled);
+                        query.bindValue(":time", time);
+                        if(query.exec())
+                        {
+                            qDebug() << "Successfully added in Mantra";
+                        }
+                   }
+
+
+
+
+               }
+
+
+
+
+               delete reply;
+           }
+
+           else {
+               //failure
+               qDebug() << "Failure" <<reply->errorString();
+               delete reply;
+           }
+
+
+
+    }
+
+
     db.close();
 
     /* *** Images download **/
