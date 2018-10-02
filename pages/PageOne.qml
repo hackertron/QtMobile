@@ -15,6 +15,15 @@ Flickable {
     // anchors.fill: parent
     property string name: "PageOne"
     property string title: qsTr("Car")
+    property string image_url: ""
+    function getImage_url()
+        {
+            image_url = dbman.getImage_url();
+            image_url = "http://vkguptamantra.herokuapp.com/images/" + image_url;
+            return image_url;
+        }
+
+
     function parsing()
     {
         var http = new XMLHttpRequest();
@@ -75,7 +84,8 @@ Flickable {
                     fillMode: Image.PreserveAspectFit
                     Layout.fillHeight: true
                     Layout.fillWidth: true
-                    source: "http://vkguptamantra.herokuapp.com/images/Mantra1.png"
+//                    source: "http://vkguptamantra.herokuapp.com/images/Mantra1.png"
+                    source: getImage_url()
                 }
             }
             HorizontalDivider {}

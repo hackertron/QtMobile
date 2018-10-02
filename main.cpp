@@ -87,7 +87,8 @@ int main(int argc, char *argv[])
     if( query.exec("CREATE TABLE IF NOT EXISTS `User`"
                    "(  `ID` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT ,"
                    "`server_id` VARCHAR(32)  NOT NULL ,"
-                   "`email` VARCHAR(100) NOT NULL);"))
+                   "`email` VARCHAR(100) NOT NULL , "
+                   "`revision_id` INT NOT NULL );"))
     {
         qDebug() << "User table created";
     }
@@ -117,10 +118,12 @@ int main(int argc, char *argv[])
 
     // insert into Mantra table
     QString id;
+    int rev_id = 0;
 
-    QSqlQuery quer("SELECT server_id FROM User WHERE ID = 1");
+    QSqlQuery quer("SELECT server_id, revision_id FROM User WHERE ID = 1");
     while (quer.next()) {
         id = quer.value(0).toString();
+        rev_id = quer.value(1).toInt();
     }
 
 
@@ -128,7 +131,7 @@ int main(int argc, char *argv[])
     qDebug() << "got id : " << id;
     if(id.isEmpty())
     {
-        qDebug() << "no insertions in Mantra yet !!";
+        qDebug() << "no insertions in User yet !!";
     }
     else
     {
@@ -153,36 +156,58 @@ int main(int argc, char *argv[])
                QJsonDocument jsonResponse = QJsonDocument::fromJson(result.toUtf8());
 
                QJsonObject jsonObj = jsonResponse.object();
+               qDebug() << "server sent revision id : " <<  jsonObj.value("revision_id").toInt();
+               qDebug() << "local rev id " << rev_id;
+
+               if(rev_id == jsonObj.value("revision_id").toInt())
+               {
+                   qDebug() << "no updation needed";
+               }
+               else
+               {
+                   query.exec("DELETE FROM Mantra");
+                   foreach (const QString& key, jsonObj.keys()) {
+
+                       qDebug() << key << " : " << jsonObj.value(key);
 
 
-               foreach (const QString& key, jsonObj.keys()) {
+                       QString email = jsonObj.value("email").toString();
+                       if(key == "mantra1" || key == "mantra2" || key == "mantra3" || key == "mantra4" || key == "mantra5" || key == "mantra6"
+                               || key == "mantra7" || key == "mantra8" || key == "mantra9")
+                       {
+                            bool enabled = jsonObj[key].toObject()["enabled"].toBool();
+                            QString time = jsonObj[key].toObject()["time"].toString();
 
-                   qDebug() << key << " : " << jsonObj.value(key);
+                            query.prepare("INSERT INTO Mantra (email, mantra_type, enabled, time) VALUES(:email, :mantra_type, :enabled, :time)");
+                            query.bindValue(":email", email);
+                            query.bindValue(":mantra_type", key);
+                            query.bindValue(":enabled", enabled);
+                            query.bindValue(":time", time);
+                            if(query.exec())
+                            {
+                                qDebug() << "Successfully added in Mantra";
+                            }
+                       }
 
-                   QString email = jsonObj.value("email").toString();
-                   if(key == "mantra1" || key == "mantra2" || key == "mantra3" || key == "mantra4" || key == "mantra5" || key == "mantra6"
-                           || key == "mantra7" || key == "mantra8" || key == "mantra9")
-                   {
-                        bool enabled = jsonObj[key].toObject()["enabled"].toBool();
-                        QString time = jsonObj[key].toObject()["time"].toString();
 
-                        query.prepare("INSERT INTO Mantra (email, mantra_type, enabled, time) VALUES(:email, :mantra_type, :enabled, :time)");
-                        query.bindValue(":email", email);
-                        query.bindValue(":mantra_type", key);
-                        query.bindValue(":enabled", enabled);
-                        query.bindValue(":time", time);
-                        if(query.exec())
-                        {
-                            qDebug() << "Successfully added in Mantra";
-                        }
+
+
                    }
 
+                   query.prepare("UPDATE User SET revision_id = :revid WHERE ID = 1");
+                   int update_revision = jsonObj.value("revision_id").toInt();
+                   query.bindValue(":revid", update_revision);
 
-
+                   if(query.exec())
+                   {
+                       qDebug() << "Update complete !!";
+                   }
+                   else
+                   {
+                       qDebug() << "Errors" << query.lastError();
+                   }
 
                }
-
-
 
 
                delete reply;

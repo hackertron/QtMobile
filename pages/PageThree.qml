@@ -17,6 +17,7 @@ Flickable {
     property  bool subscribed : false
     property string info : ""
     property string server_id: ""
+    property int revision_id:  0
 
     function disableSubmit() {
         submit.enabled = false
@@ -32,6 +33,7 @@ Flickable {
     {
         var data = {};
         data.email = emailID;
+
         var json = JSON.stringify(data);
         console.log(json);
         const url = "https://vkguptamantra.herokuapp.com/api/users/";
@@ -60,7 +62,8 @@ Flickable {
                 // save to sqliteDB
                 server_id = users["_id"];
                 emailID = users["email"];
-                dbman.subscribe_db(server_id, emailID);
+                revision_id = users["revision_id"];
+                dbman.subscribe_db(server_id, emailID, revision_id);
 
 
             }

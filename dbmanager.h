@@ -21,7 +21,7 @@ public:
     bool check_connection();
 
     // db functions
-    Q_INVOKABLE void subscribe_db(QString server_id, QString email);
+    Q_INVOKABLE void subscribe_db(QString server_id, QString email, int revision_id);
     Q_INVOKABLE QString getImage_url();
 
 

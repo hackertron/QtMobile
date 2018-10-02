@@ -21,7 +21,7 @@ dbmanager::~dbmanager()
 }
 
 
-void dbmanager::subscribe_db(QString server_id, QString email)
+void dbmanager::subscribe_db(QString server_id, QString email, int revision_id)
 {
     QString db_path = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
 
@@ -45,13 +45,14 @@ void dbmanager::subscribe_db(QString server_id, QString email)
        qDebug() << server_id;
        qDebug() << email;
 
-          query.prepare("INSERT INTO User (server_id,email) "
-                        "VALUES (:server_id , :email )");
+          query.prepare("INSERT INTO User (server_id,email, revision_id) "
+                        "VALUES (:server_id , :email, :revision_id )");
 
 
 
           query.bindValue(":server_id", server_id);
           query.bindValue(":email", email);
+          query.bindValue(":revision_id", revision_id);
 
 
 
@@ -70,6 +71,47 @@ void dbmanager::subscribe_db(QString server_id, QString email)
           }
 }
 
+
+
+QString return_diff(QHash<QString, QString> mantra)
+{
+    QTime sys_time;
+    QHash<QString, QTime>result;
+        sys_time =  QTime::currentTime();
+    QHashIterator<QString, QString> i(mantra);
+    while(i.hasNext())
+    {
+        QString server_timeID = i.key();
+        QString server_time = i.value();
+        QStringList splitted_time = server_time.split(":");
+
+        QString hrs = splitted_time.at(0);
+        QString min = splitted_time.at(1);
+        int int_hrs =hrs.toInt();
+        int int_min = min.toInt();
+        QTime notify_time(int_hrs,int_min,0,0);
+        if(notify_time >= sys_time)
+        {
+            result.insert(server_timeID,notify_time);
+        }
+
+    }
+    QString image;
+    QHashIterator<QString, QTime> j(result);
+    QTime min(0,0,0,0);
+    while(j.hasNext())
+    {
+        if(j.value() < min)
+        {
+            image = j.key();
+        }
+    }
+
+
+    return image;
+
+
+}
 
 QString dbmanager::getImage_url()
 {
@@ -92,17 +134,35 @@ QString dbmanager::getImage_url()
 
        }
        QSqlQuery query;
+       QString image;
 
        query.prepare("SELECT email from User where ID = 1");
 
-       if(query.exec())
+
+       if(query.exec() && (query.size() > 0 || query.size() != -1))
        {
           qDebug() << "done";
+          email = query.value(0).toString();
+          QHash<QString, QString> mantra;
+          query.prepare("SELECT mantra_type time FROM Mantra WHERE enabled = true AND email = '" + email + "'");
+          while(query.next())
+          {
+              mantra.insert(query.value(0).toString(),query.value(0).toString());
+          }
+
+          image = return_diff(mantra);
 
        }
-       query.prepare("SELECT mantra_type FROM Mantra WHERE enabled = true AND ");
+       else
+       {
+           image = "Mantra1.png";
+       }
+//       image = dir.absolutePath() + "/" + image;
 
-       return email;
+       qDebug() << "test :::: " << image;
+
+
+       return image;
 
 }
 
