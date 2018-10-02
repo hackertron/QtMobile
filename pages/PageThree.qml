@@ -31,11 +31,10 @@ Flickable {
     {
         var data = {};
         data.email = emailID;
-        data.password = "temp_pass";
         var json = JSON.stringify(data);
         console.log(json);
-//        const url = "https://vkguptamantra.herokuapp.com/api/users/";
-        const url = "http://localhost:3000/api/users/";
+        const url = "https://vkguptamantra.herokuapp.com/api/users/";
+
         var xhr = new XMLHttpRequest();
         xhr.open("POST", url, true);
         xhr.setRequestHeader('Content-type','application/json; charset=utf-8');
