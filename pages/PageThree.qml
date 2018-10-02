@@ -57,6 +57,9 @@ Flickable {
                 disableSubmit();
 
                 // save to sqliteDB
+                server_id = users["_id"];
+                emailID = users["email"];
+                dbman.subscribe_db(server_id, emailID);
 
 
             }
@@ -99,7 +102,8 @@ Flickable {
                     leftPadding: 10
                     rightPadding: 10
                     wrapMode: Text.WordWrap
-                    text: qsTr("Subscribe by providing you email ID \n\n")                                    }
+                    text: qsTr("Subscribe by providing you email ID \n\n")
+                }
             }
 
             HorizontalDivider {
