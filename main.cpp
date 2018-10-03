@@ -121,6 +121,7 @@ int main(int argc, char *argv[])
     int rev_id = 0;
 
     QSqlQuery quer("SELECT server_id, revision_id FROM User WHERE ID = 1");
+    quer.exec();
     while (quer.next()) {
         id = quer.value(0).toString();
         rev_id = quer.value(1).toInt();

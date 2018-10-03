@@ -30,59 +30,66 @@ void dbmanager::subscribe_db(QString server_id, QString email, int revision_id)
     dir.cd("MANTRA_appdata");
 
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");//not dbConnection
-       db.setDatabaseName(dir.absoluteFilePath("MANTRA.db"));
-       if(!db.open())
-       {
-           qDebug() <<"error in opening DB";
-       }
-       else
-       {
-           qDebug() <<"connected to DB" ;
+    db.setDatabaseName(dir.absoluteFilePath("MANTRA.db"));
+    if(!db.open())
+    {
+        qDebug() <<"error in opening DB";
+    }
+    else
+    {
+        qDebug() <<"connected to DB" ;
 
-       }
-       QSqlQuery query;
+    }
+    QSqlQuery query;
 
-       qDebug() << server_id;
-       qDebug() << email;
+    qDebug() << server_id;
+    qDebug() << email;
 
-          query.prepare("INSERT INTO User (server_id,email, revision_id) "
-                        "VALUES (:server_id , :email, :revision_id )");
-
-
-
-          query.bindValue(":server_id", server_id);
-          query.bindValue(":email", email);
-          query.bindValue(":revision_id", revision_id);
+    query.prepare("INSERT INTO User (server_id,email, revision_id) "
+                  "VALUES (:server_id , :email, :revision_id )");
 
 
 
+    query.bindValue(":server_id", server_id);
+    query.bindValue(":email", email);
+    query.bindValue(":revision_id", revision_id);
 
-          if(query.exec())
-          {
-              qDebug() << "done";
-              db.close(); //  user is added now
 
-          }
-          else
-          {
-              qDebug() << query.lastError();
-              db.close();
 
-          }
+
+    if(query.exec())
+    {
+        qDebug() << "done";
+        //  user is added now
+
+    }
+    else
+    {
+        qDebug() << query.lastError();
+
+
+    }
+    db.close();
 }
 
 
 
 QString return_diff(QHash<QString, QString> mantra)
 {
+    qDebug() << mantra;
     QTime sys_time;
     QHash<QString, QTime>result;
-        sys_time =  QTime::currentTime();
+    sys_time =  QTime::currentTime();
+    qDebug() << sys_time;
     QHashIterator<QString, QString> i(mantra);
+
     while(i.hasNext())
     {
+        i.next();
         QString server_timeID = i.key();
+        qDebug() << server_timeID;
         QString server_time = i.value();
+        qDebug() << server_time;
         QStringList splitted_time = server_time.split(":");
 
         QString hrs = splitted_time.at(0);
@@ -90,10 +97,13 @@ QString return_diff(QHash<QString, QString> mantra)
         int int_hrs =hrs.toInt();
         int int_min = min.toInt();
         QTime notify_time(int_hrs,int_min,0,0);
+        qDebug() << "created time : " << notify_time;
         if(notify_time >= sys_time)
         {
             result.insert(server_timeID,notify_time);
         }
+        qDebug() << "result : " << result;
+
 
     }
     QString image;
@@ -116,53 +126,39 @@ QString return_diff(QHash<QString, QString> mantra)
 QString dbmanager::getImage_url()
 {
     QString db_path = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
-    QString email = "";
+
 
     qDebug() << db_path;
     QDir dir(db_path);
     dir.cd("MANTRA_appdata");
 
+
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");//not dbConnection
-       db.setDatabaseName(dir.absoluteFilePath("MANTRA.db"));
-       if(!db.open())
-       {
-           qDebug() <<"error in opening DB";
-       }
-       else
-       {
-           qDebug() <<"connected to DB" ;
+    db.setDatabaseName(dir.absoluteFilePath("MANTRA.db"));
+    if(!db.open())
+    {
+        qDebug() <<"error in opening DB";
+    }
+    else
+    {
+        qDebug() <<"connected to DB Mantra" ;
 
-       }
-       QSqlQuery query;
-       QString image;
+    }
+    QString image;
+    QHash<QString, QString> mantra;
+    QSqlQuery query1("SELECT mantra_type, time FROM Mantra WHERE enabled = 1");
+    while (query1.next()) {
+        QString type = query1.value(0).toString();
+        QString time  = query1.value(1).toString();
 
-       query.prepare("SELECT email from User where ID = 1");
+        qDebug() << type << " : " << time;
+        mantra.insert(type,time);
+    }
 
-
-       if(query.exec() && (query.size() > 0 || query.size() != -1))
-       {
-          qDebug() << "done";
-          email = query.value(0).toString();
-          QHash<QString, QString> mantra;
-          query.prepare("SELECT mantra_type time FROM Mantra WHERE enabled = true AND email = '" + email + "'");
-          while(query.next())
-          {
-              mantra.insert(query.value(0).toString(),query.value(0).toString());
-          }
-
-          image = return_diff(mantra);
-
-       }
-       else
-       {
-           image = "Mantra1.png";
-       }
-//       image = dir.absolutePath() + "/" + image;
-
-       qDebug() << "test :::: " << image;
+    image = return_diff(mantra);
 
 
-       return image;
+    return image;
 
 }
 
@@ -206,10 +202,10 @@ void dbmanager::downloadFile(QUrl url, QString id, QString dir_absolute_path, QS
         QNetworkRequest request(url);
         request.setRawHeader("User-Agent", userAgent);
 
-    //    QSslConfiguration sslConfiguration(QSslConfiguration::defaultConfiguration());
-    //    sslConfiguration.setPeerVerifyMode(QSslSocket::VerifyNone);
-    //    sslConfiguration.setProtocol(QSsl::AnyProtocol);
-    //    request.setSslConfiguration(sslConfiguration);
+        //    QSslConfiguration sslConfiguration(QSslConfiguration::defaultConfiguration());
+        //    sslConfiguration.setPeerVerifyMode(QSslSocket::VerifyNone);
+        //    sslConfiguration.setProtocol(QSsl::AnyProtocol);
+        //    request.setSslConfiguration(sslConfiguration);
 
         QNetworkReply *reply = webCtrl->get(request);
         replytofile.insert(reply, file);

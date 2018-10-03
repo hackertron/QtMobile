@@ -17,11 +17,20 @@ Flickable {
     property string title: qsTr("Car")
     property string image_url: ""
     function getImage_url()
+    {
+        image_url = dbman.getImage_url();
+        if(image_url === "")
         {
-            image_url = dbman.getImage_url();
-            image_url = "http://vkguptamantra.herokuapp.com/images/" + image_url;
-            return image_url;
+            image_url = "http://vkguptamantra.herokuapp.com/images/Mantra1.png";
         }
+        else
+        {
+            image_url = "http://vkguptamantra.herokuapp.com/images/" + image_url;
+            console.log(image_url);
+
+        }
+        return image_url;
+    }
 
 
     function parsing()
@@ -84,7 +93,7 @@ Flickable {
                     fillMode: Image.PreserveAspectFit
                     Layout.fillHeight: true
                     Layout.fillWidth: true
-//                    source: "http://vkguptamantra.herokuapp.com/images/Mantra1.png"
+                    //                    source: "http://vkguptamantra.herokuapp.com/images/Mantra1.png"
                     source: getImage_url()
                 }
             }
@@ -132,7 +141,7 @@ Flickable {
 
 
             }
-//            RowLayout {}
+            //            RowLayout {}
 
         } // col layout
     } // root
@@ -146,7 +155,7 @@ Flickable {
     // called immediately after Loader.loaded
     function init() {
         console.log(qsTr("Init done from One [0]"))
-        parsing()
+        //parsing()
     }
     // called from Component.destruction
     function cleanup() {
