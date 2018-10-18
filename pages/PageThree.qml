@@ -1,8 +1,8 @@
 // ekke (Ekkehard Gentz) @ekkescorner
-import QtQuick 2.9
+import QtQuick 2.7
 import QtQuick.Layouts 1.3
-import QtQuick.Controls 2.2
-import QtQuick.Controls.Material 2.2
+import QtQuick.Controls 2.1
+import QtQuick.Controls.Material 2.1
 import QtGraphicalEffects 1.0
 import "../common"
 
@@ -14,6 +14,8 @@ Flickable {
     property string name: "PageThree"
     property string title: qsTr("Subway")
     property string emailID : ""
+    property string username: ""
+    property string location: ""
     property  bool subscribed : false
     property string info : ""
     property string server_id: ""
@@ -29,10 +31,12 @@ Flickable {
         popupInfo.open()
 
     }
-    function log(emailID)
+    function log(emailID, username, location)
     {
         var data = {};
         data.email = emailID;
+        data.name = username;
+        data.location = location;
 
         var json = JSON.stringify(data);
         console.log(json);
@@ -94,10 +98,10 @@ Flickable {
                 leftPadding: 10
                 text: qsTr("Subscribe")
             }
-            IconInactive {
-                imageName: modelData.icon
-                imageSize: 48
-            }
+//            IconInactive {
+//                imageName: modelData.icon
+//                imageSize: 48
+//            }
             HorizontalDivider {}
             RowLayout {
                 LabelSubheading {
@@ -106,30 +110,42 @@ Flickable {
                     leftPadding: 10
                     rightPadding: 10
                     wrapMode: Text.WordWrap
-                    text: qsTr("Subscribe by providing you email ID \n\n")
+                    text: qsTr("Subscribe by providing you email, name and location \n\n")
                 }
             }
 
-            HorizontalDivider {
-                RowLayout {
+            HorizontalDivider {}
+//                RowLayout {
                     TextField{
                         id: email
                         placeholderText: qsTr("eg@gmail.com");
                     }
-                    Button
-                    {
-                        id: submit
-                        text: "submit"
-                        onPressed: {
-                            emailID = email.text
-                            log(emailID)
-
-                        }
+//                }
+             HorizontalDivider {}
+             TextField{
+                 id: userName
+                 placeholderText: qsTr("Ram");
+             }
+             HorizontalDivider {}
+             TextField{
+                 id: loc
+                 placeholderText: qsTr("India, UK");
+             }
+             HorizontalDivider {}
+                Button
+                {
+                    id: submit
+                    text: "submit"
+                    onPressed: {
+                        emailID = email.text
+                        username = userName.text
+                        location = loc.text
+                        log(emailID, username, location)
 
                     }
 
                 }
-            }
+
 
 
             } // col layout

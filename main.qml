@@ -1,8 +1,8 @@
 // ekke (Ekkehard Gentz) @ekkescorner
-import QtQuick 2.9
+import QtQuick 2.7
 import QtQuick.Layouts 1.3
-import QtQuick.Controls 2.2
-import QtQuick.Controls.Material 2.2
+import QtQuick.Controls 2.1
+import QtQuick.Controls.Material 2.1
 import QtGraphicalEffects 1.0
 import "common"
 import "pages"
@@ -97,7 +97,7 @@ ApplicationWindow {
 
     // NAVIGATION BAR PROPRTIES
     property var navigationModel: [{"name": "Mantra", "icon": "car.png", "source": "../pages/PageOne.qml"},
-        {"name": "Check", "icon": "bus.png", "source": "../pages/PageTwo.qml"},
+        {"name": "Contact", "icon": "bus.png", "source": "../pages/PageTwo.qml"},
         {"name": "SignUp", "icon": "subway.png", "source": "../pages/PageThree.qml"}
 /*        {"name": "Truck", "icon": "truck.png", "source": "../pages/PageFour.qml"},
         {"name": "Flight", "icon": "flight.png", "source": "../pages/PageFive.qml"}*/]
@@ -141,7 +141,7 @@ ApplicationWindow {
         source: "common/SimpleTextTitle.qml"
         onLoaded: {
             if(item) {
-                item.text = qsTr("Mantra App")
+                item.text = qsTr("Mantra Chetna")
             }
         }
     }
@@ -161,7 +161,7 @@ ApplicationWindow {
         source: "common/SimpleTextTitle.qml"
         onLoaded: {
             if(item) {
-                item.text = qsTr("Mantra App")
+                item.text = qsTr("Mantra Chetna")
             }
         }
     }

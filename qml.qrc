@@ -49,5 +49,6 @@
         <file>navigation/SideNavigationBarUncolored.qml</file>
         <file>pages/InitialItemPage.qml</file>
         <file>popups/PopupToast.qml</file>
+        <file>font/SAMAN___.ttf</file>
     </qresource>
 </RCC>

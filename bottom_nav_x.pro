@@ -8,11 +8,13 @@ CONFIG += c++11
 HEADERS += \
     applicationui.hpp \
     uiconstants.hpp \
-    dbmanager.h
+    dbmanager.h \
+    localnotification.h
 
 SOURCES += main.cpp \
     applicationui.cpp \
-    dbmanager.cpp
+    dbmanager.cpp \
+    localnotification.cpp
 
 lupdate_only {
     SOURCES +=  main.qml \
@@ -37,7 +39,6 @@ OTHER_FILES += images/black/*.png \
     *.md
 
 RESOURCES += \
-    translations.qrc \
     qml.qrc \
     images.qrc
 
@@ -85,6 +86,7 @@ DISTFILES += \
     android/res/values/libs.xml \
     android/build.gradle \
     android/gradle/wrapper/gradle-wrapper.properties \
-    android/gradlew.bat
+    android/gradlew.bat \
+    android/AndroidManifest.xml
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
