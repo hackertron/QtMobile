@@ -40,7 +40,7 @@ Flickable {
 
         var json = JSON.stringify(data);
         console.log(json);
-        const url = "https://vkguptamantra.herokuapp.com/api/users/";
+        const url = "http://vkguptamantra.herokuapp.com/api/users/";
 
         var xhr = new XMLHttpRequest();
         xhr.open("POST", url, true);

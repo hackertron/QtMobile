@@ -35,7 +35,7 @@ Flickable {
                     leftPadding: 10
                     rightPadding: 10
                     wrapMode: Text.WordWrap
-                    text: qsTr("Your Horoscope is ")
+                    text: qsTr("Contact VK Gupta to learn about Mantra and your horoscope ")
                 }
             }
             HorizontalDivider {}

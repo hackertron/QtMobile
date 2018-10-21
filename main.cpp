@@ -21,10 +21,11 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 
+#include "notification.h"
 
 int main(int argc, char *argv[])
 {
-    QGuiApplication::setApplicationName("Mantra");
+    QGuiApplication::setApplicationName("Mantra Chetna");
     QGuiApplication::setOrganizationName("rightanglemedia.in");
 
     QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
@@ -144,7 +145,7 @@ int main(int argc, char *argv[])
            QObject::connect(&mgr, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(quit()));
 
            // the HTTP request
-           const QUrl req_url = "https://vkguptamantra.herokuapp.com/api/users/" + id;
+           const QUrl req_url = "http://vkguptamantra.herokuapp.com/api/users/" + id;
            QNetworkRequest req(req_url);
            QNetworkReply *reply = mgr.get(req);
            eventLoop.exec();
@@ -249,6 +250,12 @@ int main(int argc, char *argv[])
 
                }
            }
+
+
+           /* call notifications here */
+           notification notify  ;
+           notify.schedule(5,1);
+           notify.schedule(10,2);
 
 
 

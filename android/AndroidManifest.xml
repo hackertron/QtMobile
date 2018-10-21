@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<manifest package="org.qtproject.example" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="1.0" android:versionCode="1" android:installLocation="auto">
-    <application android:hardwareAccelerated="true" android:name="org.qtproject.qt5.android.bindings.QtApplication" android:label="-- %%INSERT_APP_NAME%% --" android:icon="@drawable/icon">
+<manifest package="in.rightanglemedia.mantrachetna" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="4.0" android:versionCode="4" android:installLocation="auto">
+    <application android:hardwareAccelerated="true" android:name="org.qtproject.qt5.android.bindings.QtApplication" android:label="Mantra Chetna" android:icon="@drawable/icon">
         <activity android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|layoutDirection|locale|fontScale|keyboard|keyboardHidden|navigation" android:name="org.qtproject.qt5.android.bindings.QtActivity" android:label="-- %%INSERT_APP_NAME%% --" android:screenOrientation="unspecified" android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -58,12 +58,14 @@
             <meta-data android:name="android.app.extract_android_style" android:value="full"/>
             <!-- extract android style -->
     </activity>
+<receiver android:name="in.rightanglemedia.mantrachetna.NotificationReceiver" android:exported="true"/>
+
 
     <!-- For adding service(s) please check: https://wiki.qt.io/AndroidServices -->
 
     </application>
 
-    <uses-sdk android:minSdkVersion="16" android:targetSdkVersion="16"/>
+    <uses-sdk android:minSdkVersion="16" android:targetSdkVersion="26"/>
     <supports-screens android:largeScreens="true" android:normalScreens="true" android:anyDensity="true" android:smallScreens="true"/>
 
     <!-- The following comment will be replaced upon deployment with default permissions based on the dependencies of the application.
@@ -73,5 +75,7 @@
     <!-- The following comment will be replaced upon deployment with default features based on the dependencies of the application.
          Remove the comment if you do not require these default features. -->
     <!-- %%INSERT_FEATURES -->
+
+
 
 </manifest>

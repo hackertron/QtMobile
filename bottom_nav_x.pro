@@ -2,6 +2,8 @@
 TEMPLATE = app
 TARGET = mantra
 
+QT += androidextras
+
 QT += qml quick core sql
 CONFIG += c++11
 
@@ -9,12 +11,12 @@ HEADERS += \
     applicationui.hpp \
     uiconstants.hpp \
     dbmanager.h \
-    localnotification.h
+    notification.h
 
 SOURCES += main.cpp \
     applicationui.cpp \
     dbmanager.cpp \
-    localnotification.cpp
+    notification.cpp
 
 lupdate_only {
     SOURCES +=  main.qml \
@@ -87,6 +89,8 @@ DISTFILES += \
     android/build.gradle \
     android/gradle/wrapper/gradle-wrapper.properties \
     android/gradlew.bat \
-    android/AndroidManifest.xml
+    android/AndroidManifest.xml \
+    android/src/in/rightanglemedia/mantrachetna/NotificationReceiver.java \
+    android/src/in/rightanglemedia/mantrachetna/QtAndroidNotification.java
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android

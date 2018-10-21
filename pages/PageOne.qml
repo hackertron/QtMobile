@@ -16,6 +16,13 @@ Flickable {
     property string name: "PageOne"
     property string title: qsTr("Car")
     property string image_url: ""
+
+    function showInfo(info) {
+        popupInfo.text = info
+        popupInfo.buttonText = qsTr("OK")
+        popupInfo.open()
+
+    }
     function getImage_url()
     {
         image_url = dbman.getImage_url();
@@ -60,7 +67,7 @@ Flickable {
 
 
         };
-        http.open('GET',"https://vkguptamantra.herokuapp.com/api/users/");
+        http.open('GET',"http://vkguptamantra.herokuapp.com/api/users/");
         http.send();
     }
 
@@ -117,6 +124,8 @@ Flickable {
                     Layout.fillWidth: true
                     font.bold: true
                     onClicked: {
+                        showInfo("Good Job !!");
+                        yes.enabled = false;
 
                     }
 
@@ -129,6 +138,8 @@ Flickable {
                     Layout.fillWidth: true
                     font.bold: true
                     onClicked: {
+                        showInfo("Try to be consistent !!");
+                        no.enabled = false;
 
                     }
                 }
